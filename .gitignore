@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+myenv/
+env/
+venv/
+
+# Flask / Django specific
+instance/
+*.db
+*.sqlite3
+
+# Configuration and credentials
+*.env
+*.ini
+!.env.example
+
+# Logs and caches
+*.log
+*.pot
+*.pyc
+*.pkl
+*.cache/
+*.DS_Store
+
+# IDE / editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+
+# Byte-compiled and temporary files
+*.tmp
+*.bak
+*.swp
+
+# Model files
+*.h5
+
+# Keep the uploads folder
+static/uploads/.gitkeep

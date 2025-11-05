@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,13 +12,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
-    
+
     <!-- Use url_for to load static JS files -->
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-    <script src="{{ url_for('static', filename='js/zoom.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/init-alpine.js') }}" defer></script>
 </head>
-
 <body>
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
         <!-- Main Content -->
@@ -33,11 +30,11 @@
                     <h2 class="text-lg font-semibold mb-4">Patient Information</h2>
                     <div class="patient-info bg-white p-4 rounded-md shadow">
                         <p style="color: black;"><strong>STUDY:</strong> {{ patient_data[7] }}</p>
-                        <p><strong>Technique:</strong> {{ patient_data[8] }}</p>
-                        <p><strong>Findings:</strong> {{ patient_data[9] }}</p>
-                        <p><strong>Impression:</strong> {{ patient_data[10] }}</p>
-                        <p><strong>Recommendations:</strong> {{ patient_data[11] }}</p>
-                        <p><strong>Summary:</strong> {{ patient_data[12] }}</p>
+                        <p style="color: black;"><strong>Technique:</strong> {{ patient_data[8] }}</p>
+                        <p style="color: black;"><strong>Findings:</strong> {{ patient_data[9] }}</p>
+                        <p style="color: black;"><strong>Impression:</strong> {{ patient_data[10] }}</p>
+                        <p style="color: black;"><strong>Recommendations:</strong> {{ patient_data[11] }}</p>
+                        <p style="color: black;"><strong>Summary:</strong> {{ patient_data[12] }}</p>
                     </div>
                 </div>
 
@@ -78,8 +75,9 @@
                         </div>
 
                         <!-- X-ray Image Preview -->
-                        <div class="preview-img w-full md:w-2/3">
-                            <img src="{{ url_for('static', filename=patient_data[6].replace('static/', '')) }}" alt="X-ray Image" class="rounded-md shadow">
+                        <div class="preview-img w-full md:w-2/3 relative">
+                            <img id="xrayImage" src="{{ url_for('static', filename=patient_data[6].replace('static/', '').replace('\\', '/')) }}" alt="X-ray Image" class="rounded-md shadow">
+                            <canvas id="annotationCanvas" class="absolute top-0 left-0"></canvas> <!-- Canvas for drawing -->
                         </div>
                     </div>
 
@@ -88,11 +86,13 @@
                         <button class="reset-filter py-2 px-4 bg-red-500 text-white rounded-md">Reset Filters</button>
                         <div class="row mt-4">
                             <!-- Generate Report Button -->
-                            <a class="report py-2 px-4 bg-blue-500 text-white rounded-md mr-4 text-decoration-none" href="{{ url_for('doctor.generate_report', patient_id=patient_data[0]) }}">
+                            <a class="report py-2 px-4 bg-blue-500 text-white rounded-md mr-4 text-decoration-none" href="{{ url_for('doctor.generate_report', patient_id=patient_data[0], py_id=patient_data[14]) }}">
                                 Generate Report
                             </a>
                             <!-- Save Image Button -->
-                            <button class="save-img py-2 px-4 bg-green-500 text-white rounded-md">Save Image</button>
+                            <button id="save-annotation" class="save-img py-2 px-4 bg-green-500 text-white rounded-md">
+                                Save Image
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -100,8 +100,87 @@
         </div>
     </div>
 
+    <input type="hidden" id="patientId" value="{{ patient_data[0] }}">
+    <input type="hidden" id="pyId" value="{{ patient_data[14] }}">
+
+    <script>
+        let canvas, ctx;
+        let image = new Image();
+    
+        window.onload = function () {
+            canvas = document.getElementById("annotationCanvas");
+            ctx = canvas.getContext("2d");
+            const xrayImage = document.getElementById("xrayImage");
+    
+            canvas.width = xrayImage.width;
+            canvas.height = xrayImage.height;
+    
+            image.src = xrayImage.src;
+    
+            let drawing = false;
+    
+            canvas.addEventListener("mousedown", (e) => {
+                drawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+            });
+    
+            canvas.addEventListener("mousemove", (e) => {
+                if (drawing) {
+                    ctx.lineTo(e.offsetX, e.offsetY);
+                    ctx.stroke();
+                }
+            });
+    
+            canvas.addEventListener("mouseup", () => {
+                drawing = false;
+            });
+    
+            canvas.addEventListener("mouseout", () => {
+                drawing = false;
+            });
+        }
+    
+        function saveAnnotation() {
+            const annotatedImage = canvas.toDataURL('image/png');
+            const patientId = document.getElementById('patientId').value;
+            const pyId = document.getElementById('pyId').value;
+
+            fetch(`/doctor/analyze_xray/${patientId}/${pyId}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    annotatedImage: annotatedImage,
+                    patientId: patientId,
+                    pyId: pyId
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('Annotated image saved successfully.');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        }
+
+        document.getElementById('save-annotation').addEventListener('click', saveAnnotation);
+    </script>
+
     <!-- Use url_for to load static JS files -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
-
 </html>
+

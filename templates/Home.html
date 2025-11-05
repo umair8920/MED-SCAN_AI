@@ -9,7 +9,7 @@
                     <h1>Empower Your Medical Choices <br>with Instant AI X-ray Insights</h1>
                     <p class="mx-md-5 my-3">Save time and money with AI to make quick radiology decisions at home, without
                         waiting for the doctor in the hospital.</p>
-                    <a class="btn btn-light rounded-pill mb-2" href="/show_pt_login">Interpret Your X-ray</a>
+                    <a class="btn btn-light rounded-pill mb-2" href="{{url_for('patient.patient_login') }}">Interpret Your X-ray</a>
                     <!-- <p class="small">Your first analysis is free!</p> -->
                     <div class="items-list py-5">
                         <ul class="list-unstyled">
@@ -382,7 +382,7 @@
 
 
 
-<script>
+<!-- <script>
      document.getElementById('roleSelect').addEventListener('change', function() {
         var selectedValue = this.value;
         if (selectedValue) {
@@ -396,6 +396,6 @@
         }
     });
 
-</script>
+</script> -->
 <script src="../static/assets/js/bootstrap.bundle.min.js"></script>
 </html>

@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template
 from flask_mysqldb import MySQL
-import numpy as np
 from config import Config
 from routes.admin_routes import admin_bp
 from routes.doctor_routes import doctor_bp
@@ -49,16 +48,6 @@ def check_mysql_connection():
     except Exception as e:
         print("Error:", e)
         print("MySQL connection failed.")
-
-
-
-
-
-
-
-
-
-
 
     
 

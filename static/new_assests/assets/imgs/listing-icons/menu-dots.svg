@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" id="menu-dots">
+    <defs>
+        <clipPath id="4mcog6nf7a">
+            <path data-name="Rectangle 521" style="fill:none" d="M0 0h14v14H0z"/>
+        </clipPath>
+    </defs>
+    <g data-name="Mask Group 20" style="clip-path:url(#4mcog6nf7a)">
+        <g data-name="Group 11229">
+            <g data-name="Group 11228">
+                <path data-name="Path 5793" d="M596.83 501a1.588 1.588 0 1 1-1.6 1.583 1.587 1.587 0 0 1 1.6-1.583z" transform="translate(-589.82 -500.351)"/>
+                <path data-name="Path 5794" d="M596.832 521.385a1.588 1.588 0 1 1 1.575-1.606 1.588 1.588 0 0 1-1.575 1.606z" transform="translate(-589.82 -512.798)"/>
+                <path data-name="Path 5795" d="M596.821 538.6a1.588 1.588 0 1 1 1.586-1.6 1.587 1.587 0 0 1-1.586 1.6z" transform="translate(-589.82 -525.244)"/>
+            </g>
+        </g>
+    </g>
+</svg>

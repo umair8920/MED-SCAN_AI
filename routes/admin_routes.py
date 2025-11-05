@@ -69,6 +69,15 @@ def admin_dashboard():
         # Get the count of pending doctors
     cur.execute("SELECT COUNT(*) FROM doctor WHERE status = 'pending'")
     pending_count = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM doctor")
+    doctors_count = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM doctor WHERE sex = 'male'")
+    male_count = cur.fetchone()[0]
+
+    cur.execute("SELECT COUNT(*) FROM doctor WHERE sex = 'female'")
+    female_count = cur.fetchone()[0]
     
     # Fetch all patients
     cur.execute("SELECT * FROM patient")
@@ -85,6 +94,9 @@ def admin_dashboard():
                            pending_count=pending_count,
                            doctors = doctors, 
                            patients=patients,
+                            doctors_count=doctors_count,
+                             male_count=male_count,
+                            female_count=female_count,
                            admin_name=session.get('admin_name'),
                            admin_email=session.get('admin_email'))
 
@@ -166,6 +178,8 @@ def admin_change_password():
             return redirect(url_for('admin.admin_change_password'))
     
     return render_template('Admin/admin_change_password.html')
+
+
 
 
 

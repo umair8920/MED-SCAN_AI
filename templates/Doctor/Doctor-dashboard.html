@@ -42,7 +42,7 @@
                 <li class="Users-profile nav-item dropdown">
                     <a class="nav-link d-flex" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="text-end d-none d-sm-block">
-                            <p class="x-small mb-0">{{ doctor_data[0] }}</p>
+                            <p class="x-small mb-0">{{ doctor_data[2] }}</p>
                             <p class="text-dark mb-0">{{ doctor_data[1] }}</p>
                         </div>
                         <img src="../static/assets/imgs/images/Adminpic1.png" class="ms-3 ProfilePic" alt="" />
@@ -52,7 +52,7 @@
                             <a class="dropdown-item Profile-dropdown d-flex" href="#">
                                 <img src="../static/assets/imgs/images/Adminpic1.png" class="me-3 ProfilePic" alt="" />
                                 <div class="text-start">
-                                    <p class="x-small mb-0">{{ doctor_data[0] }}</p>
+                                    <p class="x-small mb-0">{{ doctor_data[2] }}</p>
                                     <p class="text-dark mb-0">{{ doctor_data[1] }}</p>
                                 </div>
                             </a>
@@ -61,10 +61,10 @@
                         <li class="mb-2 px-3"><a class="dropdown-item active" href="#">My Profile</a></li>
                         <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Projects</a></li>
                         <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Subscriptions</a></li>
-                        <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Statements</a></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="/doctor/{{ session['d_id'] }}/account_details">My Bank Account Details</a></li>
                         <li><hr class="dropdown-divider" /></li>
 
-                        <li class="mb-2 px-3"><a class="dropdown-item" href="#">Account Settings</a></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="{{ url_for('doctor.doctor_change_password') }}">Account Settings</a></li>
                         <li class="mb-2 px-3"><a class="dropdown-item" href="/doctor/logout_dr">Logout</a></li>
                     </ul>
                 </li>
@@ -105,7 +105,7 @@
                         </a>
                         <ul class="list-unstyled bar m-0 mt-2 hide-show d-none" style="display: none">
                             <li class="mb-1">
-                                <a class="Navigation-page-link text-decoration-none d-flex align-items-center" href="/patient_listing">
+                                <a class="Navigation-page-link text-decoration-none d-flex align-items-center" href="/doctor/pateint_listing">
                                     <div class="Navigation-dot ms-3"></div>
                                     <span class="ps-3"> Listing </span>
                                 </a>
@@ -124,11 +124,11 @@
             </div>
             <div class="col-6 pe-0" bis_skin_checked="1">
                 <p class="mb-0 text-end d-sm-block d-none">
-                    <a class="text-decoration-none active" href="./demo-1.html" bis_skin_checked="1">
+                    <a class="text-decoration-none active" href="/doctor/doctor_dashboard" bis_skin_checked="1">
                         <svg class="Tab-HomeIcon mb-1">
                             <use href="/assets/images/Tabs-icons/home-icon.svg#home-icon"></use>
                         </svg>
-                        Dashboard</a>/ <a class="text-decoration-none" href="./demo-1.html" bis_skin_checked="1">Doctor</a>
+                        Dashboard</a>/ <a class="text-decoration-none" href="/doctor/doctor_dashboard" bis_skin_checked="1">Doctor</a>
                 </p>
             </div>
         </div>
@@ -138,7 +138,7 @@
                     <div class="d-flex bg-white rounded-3 discount-green p-3 justify-content-between gap-2 card-Shadow" bis_skin_checked="1">
                         <div bis_skin_checked="1">
                             <p class="mb-0">Total patients</p>
-                            <p class="mb-0">10,000</p>
+                            <p class="mb-0">{{ patients_count }}</p>
                         </div>
                         <div class="p-3 ">
                             <svg class="" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
@@ -151,7 +151,7 @@
                     <div class="d-flex bg-white rounded-3 discount-blue p-3 justify-content-between gap-2 card-Shadow" bis_skin_checked="1">
                         <div bis_skin_checked="1">
                             <p class="mb-0"> Male Patients</p>
-                            <p class="mb-0">10,000</p>
+                            <p class="mb-0">{{ male_count }}</p>
                         </div>
                         <div class="p-3 " bis_skin_checked="1">
                             <img class="" width="20" height="20" viewbox="0 0 20 20"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACYUlEQVR4nO2Xy04UQRSGvxGNEsZhrQ8gLJUlytaFRoUMG18DDO5MyMTg9Qm8Jcb4Ioq8hZdxwWDQHUQEGXLMWZ1UOzXddXqmk/6STnoxff76p6pO/QU1NTXjRj/RM3JqI9QzMlrawJ9x3iMpTPSpAMvAoRn0YdWMtAMzcQTcrZKR/5mgKkYGmaiEkRgTY28k1oSbkQlgAXgGbAE7OqA94BvwAXgEXAdOD9mdljN+n9TIJLCmA4/NTF3gPnC+gImkRto6qLyhT769mdNEEiMNoAMcJ0quRzlMFDZyCnifMaBd4AVwG5gBpvSR9zvAS+DnAFOxJgob6QQKyIZeN2s+i5bW2M+YmVgThYy0A8tJOtJlhudKxv66gTOTAWExcaFAzYuBml2dNTfWAsspz0yEZmbP1JbW7MJE4JyQPZEKu+++A2dwYCHQnWI2diytQDeTBJCc50ZEWmxqXhuNDQcNtoyInBOpWTQaks2S88OIXHLQmDEanx00ODAiTQeNZqArJqcMIy2j8dtBg50RLK2egwafjIgEwNQsGY2PDho8NSKSYlPzxmjIbTI51wIHYso8NB04EOdxiig9IySxIhUPTe1tvfe4cM+I7WvgK8pc4G6ygiPnNLbbyC1RPGWMl4PwLM4sBS5W3ZwzMxcwIbVvURLrGVfdTmQDmNY9EbrqPqBEGsC7wCD62nleaQCc1QTQ1PdFTbi/Mr59q7VLpaG3uL8ZgxrmOdYzw61LxSD/8tcCJr6UuScGIR1mVXt/rIFtbbHu3SkPsjSuAk+ATT1ADzTF9jQ7PdYTe6TLqKamhn+cACFoBPT7KyJ4AAAAAElFTkSuQmCC"  fill="0e9f6e">
@@ -162,7 +162,7 @@
                     <div class="d-flex bg-white rounded-3 discount-orange p-3 justify-content-between gap-2 card-Shadow" bis_skin_checked="1">
                         <div bis_skin_checked="1">
                             <p class="mb-0">Female Patients</p>
-                            <p class="mb-0">10,000</p>
+                            <p class="mb-0">{{ female_count }}</p>
                         </div>
                         <div class="p-3" bis_skin_checked="1">
                             <img class=""  width="20" height="20" fill="currentColor" viewbox="0 0 20 20" fill-rule="evenodd" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACQ0lEQVR4nO2Yz2tTQRDHPzUqamNz1ru2xyretIgn9aCm+JdIpV6V4g+q4h9g1Yv4h1TE/6H0YINEK+pBtKiHRLZM4DHMg5eXnZcV9gMDjyQ7353sm9nZhYxJC1gCngDvgV3gr9iufPYYuCC/TY6jwKpMdljRPgO3gSMkwk2gN0YA2naA5WkGMAPcAQYTBDGy4OMRcKDpIILgm5JJfQWeA9eBeWBWLDzfADaAbyVjX8sf1BhrxiR+AfeA4xXGz4mPPcPPXRrMiYHxni/W8HXGyK8B0KWB6tQzgjgxgc+Ths8P3tVs1Xid6qyEtTLBV9H3Ck60jH0i5IRX3n3yqmJLRnWqkthVCQVAV7PzOPBUiYQSG5uXSmPdQWO/TyqKhH0iNl2l8c5Bgy9K5LSDxrzRj0XnjxJpO2i0lcZvBw1+NhDInNL44aDBthI55aCxoDS2HDR4q0RCAxibZaWx6aCxXwqLIqGLjc0rpfHQQYNLxoYY3ulYdIwN8SIOHJa2oSgU2opY3Fe++8AhnFhRYnvS8E3KWeNscgtHZmWTKgr2pBWP2cb3gWM4c9U4WH0EztXwtShnD32wukZD6AZydDZZq1gAOpIT1lF3nQZpGZ3qyELleSEN4IJ0AG157sq47yVjN6ZxcRduO56VTGhcG8jt5AxT5PKEF3R9pyNBLTpyWTdOQDsyJuamGo2DUtUeSJ+kJ78p311J9RK7DB3If8swB5IYeUWmQYwNMYlCMMyBkFekcZLLg7rkQFIjr0hq5BXJZEiDf7Elu2Veu9VkAAAAAElFTkSuQmCC" clip-rule="evenodd">
@@ -204,7 +204,7 @@
                             <tr class="small">
                                 <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 150px">Patient ID</th>
                                 <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 150px">Patient Name</th>
-                                <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Age</th>
+                                <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">PAY ID</th>
                                 <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Gender</th>
                                 <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Email</th>
                                 <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Phone</th>
@@ -219,16 +219,18 @@
                                 <tr class="mt-4">
                                         <td>{{ patient[0] }}</td>
                                         <td>{{ patient[1] }}</td>
-                                        <td>{{ patient[5] }}</td>
+                                        <td>{{ patient[7] }}</td>
                                         <td>{{ patient[4] }}</td>
                                         <td>{{ patient[2] }}</td>
                                         <td>{{ patient[6] }}</td>
                                         <td>{{ patient[3] }}</td>
                                         <td>{{ patient[10] }}</td>
                                         <td class="text-end">
-                                            <a href="{{ url_for('doctor.analyze_xray', patient_id=patient[0]) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ url_for('doctor.analyze_xray', patient_id=patient[0], py_id=patient[7]) }}" class="btn btn-primary btn-sm">
                                                 Analyze X-ray
                                             </a>
+                                            
+                                            
                                         </td>
                                     </tr>
                                 {% endfor %}

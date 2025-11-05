@@ -1,38 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/assets/scss/bootstrap.min.css">
     <link rel="stylesheet" href="../static/assets/scss/style.css">
     <title>Document</title>
-    <style>
-
-    </style>
 </head>
-
 <body class="bg-white">
     <nav class="navbar navbar-expand-lg justify-content-between p-3 border-bottom">
         <div class="container-fluid">
             <a class="navbar-brand" href="./Home.html">
-                <img width="35" height="35" class="mb-2" src="../static/assets/imgs/images/svg-icons/radiography.svg" alt=""> X
-                Ray
+                <img width="35" height="35" class="mb-2" src="../static/assets/imgs/images/svg-icons/radiography.svg" alt=""> X Ray
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse justify-content-end " id="navbarNavAltMarkup">
                 <div class="navbar-nav gap-md-5 gap-3 align-items-center">
                     <a class="nav-link " aria-current="page" href="#">Pricing</a>
                     <a class="btn btn-light rounded-pill" href="#">New</a>
                     <ul class="navbar-nav mb-lg-0">
                         <li class="Users-profile nav-item dropdown">
-                            <a class="nav-link d-flex" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-
+                            <a class="nav-link d-flex" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="../static/assets/imgs/images/Adminpic1.png" class="ms-3 ProfilePic" alt="">
                             </a>
                             <ul class="dropdown-menu">
@@ -49,13 +39,14 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li class="mb-2 px-3"><a class="dropdown-item active" href="#">My X-RAY</a></li>
-                                <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Credits</a></li>
+                                <li class="mb-2 px-3">
+                                    <a class="dropdown-item" href="{{ url_for('patient.view_reports') }}">My Reports</a>
+                                </li>                                
                                 <li class="mb-2 px-3"><a class="dropdown-item" href="#">Feedback</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-
-                                <li class="mb-2 px-3"><a class="dropdown-item" href="#">Account Settings</a></li>
+                                <li class="mb-2 px-3"><a class="dropdown-item" href="{{ url_for('patient.patient_change_password') }}">Account Settings</a></li>
                                 <li class="mb-2 px-3"><a class="dropdown-item" href="/patient/logout_pt">Logout</a></li>
                             </ul>
                         </li>
@@ -67,102 +58,77 @@
     <div class="top-content text-center my-5">
         <h1>Get Instant Interpretation for <br> Your X-ray Images</h1>
         <h3 class="my-5"><b>Upload your X-ray image</b></h3>
-
-        <div class="row w-100 justify-content-center mb-3">
-            <div class="col-md-4">
-                <div class="w-100 h-100" id="image-container">
-                    <p>No image uploaded</p>
-                    <img id="uploaded-image" src="" alt="Uploaded Image">
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-center">
-        <form action="{{url_for('patient.sub_img') }}" method="post" enctype="multipart/form-data" >
-                 
-            <input type="hidden" name="name"   value="{{patient_data[0]}}">
-            <input type="hidden"  name="age"   value="{{patient_data[2]}}">
-            <input type="hidden"  name="p_id"  value="{{patient_data[4]}}">
-            <input type="file" id="x_ray" name="x_ray"  accept=".dcm, image/png, image/jpeg, image/jpg" required>
-            <input type="submit"  class="btn btn-primary">
-            <!-- <button id="upload-button" class="btn btn-primary form-control"
-                onclick="document.getElementById('file-input').click()">Upload Image</button>
-            <button id="interpret-button" class="btn btn-primary" style="display: none;"
-                onclick="interpretImage()">Interpret</button>
-            <input name="x_ray" type="file" id="file-input" style="display: none;" accept="image/*" onchange="displayImage(event)"> -->
-        
-        </form>
-        </div>
-
     </div>
     <div class="report">
-        <div class="mx-auto flex w-full flex-col gap-1" bis_skin_checked="1">
+        <div class="row w-100 justify-content-center mb-3">
+            <div class="col-md-4">
+                <!-- Image Upload Input -->
+                <input type="file" id="x_ray" accept=".dcm, image/png, image/jpeg, image/jpg" required onchange="previewImage(event)">
+                <br><br>
+                <!-- Submit Button -->
+                <button class="btn btn-primary" id="submitBtn" onclick="uploadImage()">Analyze</button>
+            </div>
+        </div>
+        <!-- Image Preview -->
+        <div class="image-container">
+            <img id="imagePreview" alt="Submitted Image Preview">
+        </div>        
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="text-center my-3" style="display:none;">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2"><b>AI is performing Analysis...</b></p>
+        </div>
+        <!-- Output Section -->
+        <div id="output" class="mx-auto flex w-full flex-col gap-1" style="display:none;">
             <h2 class="py-2 text-center">Radiology Report</h2>
-            <div class="d-flex justify-content-center flex-wrap" bis_skin_checked="1">
-                <div class="col-md-6" bis_skin_checked="1">
-                    <p><span class="text-dark"><b>Study:</b></span> Chest X-ray</p>
-                    <p><span class="text-dark"><b>Technique:</b></span> PA</p>
-                    <p><span class="text-dark"><b>Findings:</b></span></p>
-                    <ul>
-                        <li>Pleural thickening in the right lower lobe.</li>
-                    </ul>
-                    <p><span class="text-dark"><b>Impression:</b></span></p>
-                    <ul>
-                        <li>Pleural disease in the right lower lobe.</li>
-                    </ul>
-                    <p><span class="text-dark"><b>Recommendations:</b></span></p>
-                    <ul>
-                        <li>Correlate with clinical presentation.</li>
-                    </ul>
-                    <p><span class="text-dark"><b>Summary:</b></span></p>
-                    <p>The chest X-ray shows thickening in the lining of the lung on the right side. This may indicate a pleural disease. It is recommended to compare this finding with the patient's symptoms.</p>
-                    <p>This report is provided for educational and professional purposes only. It should not be used as a substitute for professional medical advice, diagnosis, or treatment.</p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <div class="col-md-6">
+                    <p><span class="text-dark"><b>Study:</b></span> <span id="study">Chest X-ray</span></p>
+                    <p><span class="text-dark"><b>Technique:</b></span> <span id="technique">AI ANALYSIS</span></p>
+                    <p><span class="text-dark"><b>Findings:</b></span> <span id="findings">Pleural thickening in the right lower lobe.</span></p>
+                    <p><span class="text-dark"><b>Impression:</b></span> <span id="impression">Pleural disease in the right lower lobe.</span></p>
+                    <p><span class="text-dark"><b>Recommendations:</b></span> <span id="recommendations">Correlate with clinical presentation.</span></p>
+                    <p><span class="text-dark"><b>Summary:</b></span> <span id="summary">The chest X-ray shows thickening in the lining of the lung on the right side. This may indicate a pleural disease.</span></p>
+                    <button id="submitAnalysisBtn" style="display:none;" onclick="openModal()">Consult Doctor</button>
                 </div>
             </div>
-            <div class="d-flex flex-wrap flex-column align-content-center gap-4 py-4">
-            <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#createticket">Ask to Doctor</button>
-            <button class="btn btn-light-primary rounded-pill">send to my email</button>
-            <div class="modal fade" id="createticket" tabindex="-1" aria-labelledby="staticBackdropLabel"
-            style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header p-4">
-                        <h5 class="modal-title" id="staticBackdropLabel">Create Tickets</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4 pb-0">
-        <!-- Payment Form -->
-        <h3>Make a Payment</h3>
-        <form action="{{ url_for('patient.patient_dashboard') }}" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="amount" class="form-label">Amount</label>
-                <input type="number" class="form-control" id="amount" name="amount" required>
-            </div>
-            <div class="mb-3">
-                <label for="doctor_id" class="form-label">Select Doctor</label>
-                <select class="form-select" id="doctor_id" name="doctor_id" required>
-                    <option selected disabled value="">Please select</option>
-                    {% for doctor in approved_doctors %}
-                        <option>{{ doctor[0] }}</option>
-                    {% endfor %}
+        </div>
+    </div>    
+        <!-- Payment Modal -->
+    <div id="paymentModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Payment Form</h2>
+            <form id="paymentForm">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" required>
+                <br><br>
+                <label for="doctor">Doctor:</label>
+                <select id="doctor" required>
+                    <option value="">Select Doctor</option>
+                    <!-- Doctors will be dynamically loaded here -->
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="image" class="form-label">Upload Payment Image</label>
-                <input type="file" class="form-control" id="image" name="image">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit Payment</button>
-        </form>
-                </div>
-            </div>
-        </div>
-        </div>
+                <br><br>
+    
+                <!-- Display additional doctor details -->
+                <p>Account Number: <span id="specializationField"></span></p>
+                <p>Account Name: <span id="accountNumberField"></span></p>
+                <p>Bank Name: <span id="accountNameField"></span></p>
+                <p>Specialization: <span id="bankNameField"></span></p>
+
+                <br><br>
+                <label for="payment_slip">Payment Slip:</label>
+                <input type="file" id="payment_slip" accept="image/*" required>
+                <br><br>
+                <button type="button" onclick="handleSubmit()">Submit Payment & Save Analysis</button>
+            </form>
         </div>
     </div>
+
     <footer class="row pt-5 px-5 w-100 justify-content-center border-top">
         <div class="col-md-4 col-sm-6 mb-3">
             <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-                <img width="35" height="35" src="../static/assets/imgs/images/svg-icons/radiography.svg" class="brandImg">
-                X-RAY
+                <img width="35" height="35" src="../static/assets/imgs/images/svg-icons/radiography.svg" class="brandImg"> X-RAY
             </a>
             <p class="mt-4">Copyright © 2024 - MedScan AI</p>
             <ul class="list-unstyled d-flex flex-wrap gap-3 social-links mt-5">
@@ -202,20 +168,8 @@
             </div>
             <ul class="nav flex-column mt-4">
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        X-rays
-                    </a>
-                <!-- </li>
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        CT Scans
-                    </a>
+                    <a href="#" class="nav-link p-0">X-rays</a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        MRIs
-                    </a>
-                </li> -->
             </ul>
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
@@ -224,51 +178,254 @@
             </div>
             <ul class="nav flex-column mt-4">
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        Tutorials
-                    </a>
+                    <a href="#" class="nav-link p-0">Tutorials</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        News
-                    </a>
+                    <a href="#" class="nav-link p-0">News</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        Insights
-                    </a>
+                    <a href="#" class="nav-link p-0">Insights</a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="#" class="nav-link p-0">
-                        Learnings
-                    </a>
+                    <a href="#" class="nav-link p-0">Learnings</a>
                 </li>
             </ul>
         </div>
     </footer>
-</body>
+    <script src="../static/assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewImage(event) {
+    const file = event.target.files[0];
 
-<script>
-    function displayImage(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const imgElement = document.getElementById('uploaded-image');
-                imgElement.src = e.target.result;
-                imgElement.style.display = 'block';
-                document.querySelector('#image-container p').style.display = 'none';
-                document.getElementById('upload-button').style.display = 'none';
-                document.getElementById('interpret-button').style.display = 'block';
+    // Check if a file is selected
+    if (!file) {
+        console.error('No file selected');
+        return;
+    }
+
+    // Validate file type
+    const validExtensions = ['jpg', 'jpeg', 'png', 'dcm'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    if (!validExtensions.includes(fileExtension)) {
+        alert('Please select a valid image file (jpg, jpeg, png, dcm).');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const img = document.getElementById('imagePreview');
+        img.src = e.target.result;
+        img.style.display = 'block'; // Show the preview image
+        img.style.width = '300px'; // Styling for preview
+        img.style.height = '300px';
+        img.style.objectFit = 'contain';
+        img.style.border = '2px solid #ddd';
+        img.style.marginTop = '10px';
+    };
+
+    reader.onerror = function () {
+        console.error('Error reading file:', reader.error);
+    };
+
+    reader.readAsDataURL(file);
+}
+
+async function uploadImage() {
+    const input = document.getElementById('x_ray');
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Show loading indicator
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    loadingIndicator.style.display = 'block';
+
+    try {
+        const response = await fetch('/patient/predict', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+
+            // Hide loading indicator
+            loadingIndicator.style.display = 'none';
+
+            // Populate the result data in the output section
+            document.getElementById('study').textContent = "Chest X-ray";
+            document.getElementById('technique').textContent = "AI ANALYSIS";
+            document.getElementById('findings').textContent = result.predicted_class;
+            document.getElementById('impression').textContent = `Confidence: ${result.confidence.toFixed(2)}%`;
+            document.getElementById('summary').textContent = result.summary;
+
+            document.getElementById('submitAnalysisBtn').style.display = 'block';
+            document.getElementById('output').style.display = 'block';
+
+            // Save the result data for later submission
+            window.analysisData = {
+                x_ray_image: `${result.image_path}`, // Use the correct path returned from the server
+                study: "Chest X-ray",
+                technique: "AI ANALYSIS",
+                findings: result.predicted_class,
+                impression: `Confidence: ${result.confidence.toFixed(2)}%`,
+                recommendations: "Consult a doctor",
+                summary: result.summary
+            };
+        } else {
+            // Hide loading indicator
+            loadingIndicator.style.display = 'none';
+            console.error('Failed to upload image:', response.statusText);
+        }
+    } catch (error) {
+        // Hide loading indicator
+        loadingIndicator.style.display = 'none';
+        console.error('Error uploading image:', error);
+    }
+}
+
+    
+        async function submitAnalysis() {
+            try {
+                const response = await fetch('/patient/save_analysis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(window.analysisData)
+                });
+    
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Analysis saved successfully!');
+                } else {
+                    alert('Failed to save analysis.');
+                }
+            } catch (error) {
+                console.error('Error saving analysis:', error);
+                alert('An error occurred while saving the analysis.');
             }
-            reader.readAsDataURL(file);
+        }
+
+        async function loadDoctors() {
+            try {
+                const response = await fetch('/patient/get_approved_doctors', {
+                    method: 'GET',
+                });
+
+                if (response.ok) {
+                    const doctors = await response.json();
+                    const doctorDropdown = document.getElementById('doctor');
+
+                    // Clear existing options
+                    doctorDropdown.innerHTML = '<option value="">Select Doctor</option>';
+
+                    // Populate dropdown with doctor options
+                    doctors.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.value = doctor.d_id; // ID used for backend purposes
+                        option.textContent = doctor.name; // Only name is displayed
+                        option.setAttribute('data-specialization', doctor.specialization);
+                        option.setAttribute('data-account-number', doctor.Account_number);
+                        option.setAttribute('data-account-name', doctor.Account_name);
+                        option.setAttribute('data-bank-name', doctor.Bank_name);
+
+                        doctorDropdown.appendChild(option);
+                    });
+                } else {
+                    console.error('Failed to fetch doctors:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching doctors:', error);
+            }
+        }
+
+        document.getElementById('doctor').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+
+            // Extract additional information from the selected option
+            const specialization = selectedOption.getAttribute('data-specialization');
+            const accountNumber = selectedOption.getAttribute('data-account-number');
+            const accountName = selectedOption.getAttribute('data-account-name');
+            const bankName = selectedOption.getAttribute('data-bank-name');
+
+            // Populate related fields (you can add hidden fields or display directly in the modal)
+            document.getElementById('specializationField').textContent = specialization || '';
+            document.getElementById('accountNumberField').textContent = accountNumber || '';
+            document.getElementById('accountNameField').textContent = accountName || '';
+            document.getElementById('bankNameField').textContent = bankName || '';
+        });
+
+
+
+    // Call this function when the modal opens to fetch and display doctors
+    function openModal() {
+        loadDoctors();  // Load approved doctors into the dropdown
+        document.getElementById('paymentModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    async function handleSubmit() {
+        const amount = document.getElementById('amount').value;
+        const doctor_id = document.getElementById('doctor').value;
+        const paymentSlip = document.getElementById('payment_slip').files[0];
+
+        // Validate required fields
+        if (!amount || !doctor_id || !paymentSlip) {
+            alert('Please fill out all payment fields and upload a payment slip.');
+            return;
+        }
+
+        // Prepare FormData for submission
+        const formData = new FormData();
+        
+        // Add X-ray analysis data from window.analysisData
+        const analysisData = window.analysisData;
+        if (analysisData) {
+            formData.append('x_ray_image', analysisData.x_ray_image);
+            formData.append('study', analysisData.study);
+            formData.append('technique', analysisData.technique);
+            formData.append('findings', analysisData.findings);
+            formData.append('impression', analysisData.impression);
+            formData.append('recommendations', analysisData.recommendations);
+            formData.append('summary', analysisData.summary);
+        } else {
+            alert('No analysis data available to submit.');
+            return;
+        }
+
+        // Add payment data
+        formData.append('amount', amount);
+        formData.append('doctor_id', doctor_id);
+        formData.append('image', paymentSlip);
+
+        // Send form data to the server
+        try {
+            const response = await fetch('/patient/save_analysis', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('Payment and analysis saved successfully!');
+                closeModal();  // Close the modal after successful submission
+                window.location.href = '/patient/patient_dashboard';  // Redirect to patient dashboard
+            } else {
+                const errorData = await response.json();
+                alert('Failed to save payment and analysis: ' + errorData.error);
+            }
+        } catch (error) {
+            console.error('Error submitting payment and analysis:', error);
+            alert('An error occurred while submitting the data.');
         }
     }
 
-    function interpretImage() {
-        alert('Interpret image functionality not yet implemented.');
-    }
-</script>
-<script src="../static/assets/js/bootstrap.bundle.min.js"></script>
-
+    </script>
+    
+    
+    
+</body>
 </html>

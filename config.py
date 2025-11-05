@@ -1,21 +1,26 @@
+import os
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class Config:
     # MySQL configuration
-    MYSQL_HOST = 'localhost'
-    MYSQL_USER = 'root'
-    MYSQL_PASSWORD = ''
-    MYSQL_DB = 'med_scan_db'
+    MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
+    MYSQL_USER = os.getenv('MYSQL_USER', 'root')
+    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', '')
+    MYSQL_DB = os.getenv('MYSQL_DB', 'med_scan_db')
 
     # Flask session and security configuration
-    SECRET_KEY = '9956c9db4904894696a9154760dc4d001ea4376160d7500c9629f9ae19b85e83'
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_PATH = '/'
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=int(os.getenv('SESSION_LIFETIME', 30)))
+    SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True').lower() == 'true'
+    SESSION_COOKIE_HTTPONLY = os.getenv('SESSION_COOKIE_HTTPONLY', 'True').lower() == 'true'
+    SESSION_COOKIE_PATH = os.getenv('SESSION_COOKIE_PATH', '/')
 
     # File upload configuration
-    UPLOAD_FOLDER = 'static/uploads'
+    UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'static/uploads')
     ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'dcm'}
 
     @staticmethod

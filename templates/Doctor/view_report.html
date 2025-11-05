@@ -134,22 +134,22 @@
             <label>Name:</label> {{ patient_data[1] }}
         </div>
         <div>
-            <label>PID:</label> {{ patient_data[0]  }}
+            <label>Patient_ID:</label> {{ patient_data[0]  }}
         </div>
         <div>
             <label>Age:</label> {{ patient_data[2] }}
         </div>
         <div>
-            <label>Referenced By:</label> {{ patient_data[11]}}
+            <label>PAY_ID:</label> {{ patient_data[14]}}
         </div>
         <div>
-            <label>Reported On:</label> {{ patient_data[12] }}
+            <label>X-ray Technique:</label> {{ patient_data[8] }}
         </div>
         <div>
             <label>Gender:</label> {{ patient_data[3] }}
         </div>
         <div>
-            <label>X-ray Technique:</label> {{ patient_data[8] }}
+            <label>SUMMARY:</label> {{ patient_data[12] }}
         </div>
     </div>
 
@@ -166,17 +166,18 @@
 
     <!-- X-ray Image -->
     <h2>X-ray Image</h2>
-    <img src="{{ url_for('static', filename=patient_data[13].replace('static/', '')) }}"  alt="X-ray Image"> <!-- Display the x-ray image from x_ray_analysis -->
+    <img src="{{ url_for('static', filename=patient_data[13].replace('static/', '').replace('\\', '/')) }}" alt="X-ray Image"> <!-- Display the x-ray image from x_ray_analysis -->
 
     <hr style="width:100%;text-align:left;margin-left:0; height: 100%;"> 
 
     <!-- Report Form -->
-    <form action="{{ url_for('doctor.generate_report', patient_id=patient_data[0]) }}" method="POST">
+    <form action="{{ url_for('doctor.generate_report', patient_id=patient_data[0], py_id=patient_data[14]) }}" method="POST">
         <h2>Generate Report</h2>
         <label for="report_details">Report Details:</label>
         <textarea id="report_details" name="report_details" placeholder="Enter report details..." required></textarea>
         <button type="submit">Generate Report</button>
     </form>
+    
 
     <p class="end-of-report">***End of Report***</p>
 </section>

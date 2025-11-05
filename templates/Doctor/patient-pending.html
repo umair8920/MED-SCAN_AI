@@ -1,49 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Payments</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/assets/scss/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/assets/scss/style.css">
+    <title>Document</title>
 </head>
+
 <body>
-    <div class="container mt-5">
-        <!-- Pending Payments Overview -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6 mt-lg-0 mt-sm-4 mt-3">
-                <div class="d-flex bg-white rounded-3 discount-red p-3 justify-content-between gap-2 card-Shadow">
-                    <div>
-                        <p class="mb-0">Pending Payments</p>
-                        <p class="mb-0">{{ pending_count }}</p> <!-- Display count of pending payments -->
-                    </div>
-                    <div class="p-3">
-                        <svg class="" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" fill="#6bdae5"></path>
+
+    <nav class="navBar py-sm-3 px-4 bg-white Shadow d-flex align-items-center fixed-top">
+      
+        <div class="collapse navbar-collapse ps-3 h-100 justify-content-end" id="navbarSupportedContent">
+            <button type="button" class="NavAncor-Acitve-reposive border-0 Nav-Hide ms-4 d-md-none py-1 px-2" onclick="NavHide()">
+                <svg class="expandbtn" width="18.484" height="13.092">
+                    <use href="../static/assets/images/icons/toggle-svg.svg#toggle"></use>
+                </svg>
+            </button>
+    
+
+            <button type="button" class="NavAncor-Acitve-reposive border-0 d-md-none ms-auto me-0 me-sm-3 py-1 px-2" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg class="expandbtn" width="18.484" height="13.092">
+                    <use href="../static/assets/images/icons/expand-svg.svg#expand"></use>
+                </svg>
+            </button>
+            <ul class="dropdown-menu mt-3 border-0 Mobile-menu">
+                <li class="items d-flex align-items-center active position-relative">
+                    <a class="dropdown-item active" href="#">Dashboard</a>
+                </li>
+                <li class="items d-flex align-items-center position-relative">
+                    <a class="dropdown-item" href="#">Pages</a>
+                </li>
+                <li class="items d-flex align-items-center position-relative">
+                    <a class="dropdown-item" href="#">Apps</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav mb-lg-0">
+                <li class="Users-profile nav-item dropdown">
+                    <a class="nav-link d-flex" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="../static/assets/imgs/images/Adminpic1.png" class="ms-3 ProfilePic" alt="" />
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="mb-2 p-2">
+                            <a class="dropdown-item Profile-dropdown d-flex" href="#">
+                                <img src="../static/assets/imgs/images/Adminpic1.png" class="me-3 ProfilePic" alt="" />
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item active" href="#">My Profile</a></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Projects</a></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Subscriptions</a></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="#">My Statements</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="#">Account Settings</a></li>
+                        <li class="mb-2 px-3"><a class="dropdown-item" href="/doctor/logout_dr">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- NAVBAR END-->
+    <!--side-bar-->
+    <div class="side-menu Shadow-side-nav Animation" id="side-bar">
+        <div class="overflow">
+            <nav class="nav flex-column">
+                <ul class="list-unstyled">
+                    <!-- Dashboard Div -->
+                    <li class="nav-item px-3 mb-3">
+                    <a class="btn nav-link p-2 Navigation-btn w-100 text-start border-0" href="/doctor/doctor_dashboard" id="drop-icon-right1">
+                        <svg class="Nav-svg" width="20" height="20">
+                            <use href="../static/assets/imgs/Navbar-svg/Home-icon.svg#home-icon"></use>
                         </svg>
-                    </div>
-                </div>
+
+                        <span class="hide-show Navigation-title mb-0 d-none">Dashboard</span>
+
+                        <svg class="float-end hide-show d-none arrow-icon" width="4.922" height="8.486">
+                            <use href="../static/assets/images/icons/Navbar-icons/Arrow-icon.svg#arrow-right"></use>
+                        </svg>
+                    </a>
+                    </li>
+                    <!-- Pationt Div -->
+                    <li class="nav-item px-3 mb-3">
+                        <a class="btn nav-link p-2 Navigation-btn Navigation-active small-active w-100 text-start border-0 bg-transparent" id="drop-icon-right1">
+                            <svg class="Nav-svg" width="20" height="20">
+                                <use href="../static/assets/imgs/Navbar-svg/nav-user-icon.svg#users-icon"></use>
+                            </svg>
+                            <span class="hide-show Navigation-title mb-0 d-none">patients</span>
+
+                            <svg class="float-end hide-show d-none arrow-icon" width="4.922" height="8.486">
+                                <use href="../static/assets/images/icons/Navbar-icons/Arrow-icon.svg#arrow-right"></use>
+                            </svg>
+                        </a>
+                        <ul class="list-unstyled bar m-0 mt-2 hide-show d-none" style="display: none">
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="page-wrapper px-3 px-md-4" bis_skin_checked="1">
+        <div class="row w-100 m-0 py-4 px-0 align-items-end Page-Heading" bis_skin_checked="1">
+            <div class="col-6 ps-0" bis_skin_checked="1">
+                <h4 class="mb-0">Patients Listing</h4>
+            </div>
+            <div class="col-6 pe-0" bis_skin_checked="1">
+                <p class="mb-0 text-end d-sm-block d-none">
+                    <a class="text-decoration-none active" href="/doctor/doctor_dashboard" bis_skin_checked="1">
+                        <svg class="Tab-HomeIcon mb-1">
+                            <use href="/assets/images/Tabs-icons/home-icon.svg#home-icon"></use>
+                        </svg>
+                        Dashboard</a>
+                </p>
             </div>
         </div>
 
-        <!-- Pending Payments List -->
-        <div class="table-responsive mt-5">
-            <table class="table table-hover table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Payment ID</th>
-                        <th>Patient Name</th>
-                        <th>Amount</th>
-                        <th>Payment Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if pending_patient %}
+        <div class="container-fluid mt-1 bg-white card-Shadow rounded-2 px-0">
+            <div class="d-flex justify-content-between flex-wrap align-items-center p-4 pb-0">
+                <div class="input mb-3">
+                    <input type="text" class="search-box ps-3 py-1" placeholder="Please Enter" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn bg-primary" type="button" id="button-addon2">
+                        <span>
+                            <svg class="SearchIcon mb-1">
+                                <use href="../static/assets/imgs/listing-icons/search-icon.svg#search-icon"></use>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive p-4 pe-2 pt-0" style="height: 60vh">
+                <table class="table Search-Employees table-borderless table-striped table-hover">
+                    <thead class="Employees-border sticky-top bg-white" style="z-index: 1 !important">
+                        <tr class="small">
+                            <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 150px">Payment ID</th>
+                            <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 150px">Patient Name</th>
+                            <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Payment Slip</th>
+                            <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Amount</th>
+                            <th scope="col" class="pb-3 dashed-border-bottom" style="min-width: 100px">Payment Date</th>
+                            <th scope="col" class="pb-3 text-end dashed-border-bottom">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        {% if pending_patient %}
                         {% for payment in pending_patient %}
-                            <tr>
+                            <tr class="mt-4">
                                 <td>{{ payment.pay_id }}</td> <!-- Payment ID -->
                                 <td>{{ payment.patient_name }}</td> <!-- Patient Name -->
+                                <td class="text-center">
+                                    <!-- Eye Icon to view payment slip -->
+                                    <a href="{{ url_for('static', filename=payment.image.replace('static/', '').replace('\\', '/')) }}" target="_blank" title="View Payment Slip">
+                                        <svg width="20" height="20" fill="currentColor">
+                                            <use href="../static/assets/imgs/listing-icons/EyeIcon.svg#eyeIcon"></use>
+                                        </svg>
+                                    </a>                                                                       
+                                </td>
                                 <td>${{ payment.amount }}</td> <!-- Payment Amount -->
                                 <td>{{ payment.payment_date.strftime('%Y-%m-%d') }}</td> <!-- Payment Date -->
                                 <td class="text-center">
@@ -55,18 +168,56 @@
                             </tr>
                         {% endfor %}
                     {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center">No pending payments.</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+                            <tr>
+                                <td colspan="9" class="text-center">No pending payments.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>                                               
+                </table>
+            </div>  
+            <div class="employee-displaying d-flex flex-wrap-reverse align-items-center justify-content-between p-3 border-top">
+                <div class="d-flex flex-wrap-reverse align-items-center mt-md-0 mt-3">
+                    <p class="mb-0 mt-sm-0 mt-1 displaying-records">Displaying 10 for 230 records</p>
+                    <div class="d-flex justify-content-center align-items-center ms-sm-0 ms-2">
+                        <select class="ms-sm-4 form-select input-flied gray border-0">
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>30</option>
+                            <option>40</option>
+                            <option>50</option>
+                        </select>
+                        <div class="d-flex align-items-center">
+                            <div class="ms-sm-3 ms-2">
+                                <div class="loader"></div>
+                            </div>
+                            <div class="displaying-records ms-2">
+                                <label for="loader">loading...</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagination-nav">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination align-items-center mb-0 gap-2">
+                            <li class="page-item">
+                                <a class="page-link p-1 p-sm-2 py-2" href="#">previous</a>
+                            </li>
+                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link p-1 p-sm-2 py-2" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
+    <script src="../static/assets/js/jquery-3.6.3.min.js"></script>
+    <script src="../static/assets/js/main.js"></script>
+    <script src="../static/assets/js/Toggels.js"></script>
+    <script src="../static/assets/js/bootstrap.bundle.min.js"></script>
+    </html>

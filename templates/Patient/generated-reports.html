@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Reports</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Arial', sans-serif;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .report-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            border-left: 4px solid #0d6efd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .dark-mode .report-card {
+            background-color: #1e1e1e;
+            border-left-color: #bb86fc;
+        }
+        .report-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+        .report-header {
+            background-color: #e9ecef;
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .dark-mode .report-header {
+            background-color: #2a2a2a;
+            border-bottom-color: #444444;
+        }
+        .report-body {
+            padding: 1rem;
+        }
+        .report-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .dark-mode .report-label {
+            color: #e0e0e0;
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25em 0.6em;
+            font-weight: 600;
+            border-radius: 0.25rem;
+        }
+        .status-done {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .xray-image {
+            max-width: 20%;
+            height: auto;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        .report-section {
+            margin-bottom: 1.5rem;
+        }
+        .report-section h3 {
+            font-size: 1.2rem;
+            color: #0d6efd;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+        }
+        .btn-custom {
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 25px;
+            padding: 0.5rem 1.25rem;
+        }
+        .btn-custom:hover {
+            opacity: 0.85;
+        }
+        .btn-primary-custom {
+            background-color: #0d6efd;
+            border: none;
+        }
+        .btn-primary-custom:hover {
+            background-color: #0056b3;
+        }
+        .btn-success-custom {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-success-custom:hover {
+            background-color: #218838;
+        }
+        .btn-secondary-custom {
+            background-color: #6c757d;
+            border: none;
+        }
+        .btn-secondary-custom:hover {
+            background-color: #5a6268;
+        }
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .xray-image {
+                max-width: 50%;
+            }
+        }
+        @media (max-width: 576px) {
+            .xray-image {
+                max-width: 75%;
+            }
+            .report-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Medical Reports</h1>
+
+        <!-- Search Bar -->
+        <div class="mb-4">
+            <input id="search-bar" type="text" class="form-control" placeholder="Search reports by patient name, date, or status">
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div class="mb-4 text-end">
+            <!-- Dark Mode Toggle Button -->
+            <button id="dark-mode-toggle" class="btn btn-secondary-custom">Toggle Dark Mode</button>
+        
+            <!-- Back to Dashboard Button -->
+            <a href="{{ url_for('patient.patient_dashboard') }}" id="back-to-dashboard" class="btn btn-secondary-custom">Back to Dashboard</a>
+        </div>
+        
+        {% if reports %}
+            <div id="reports-container">
+                {% for report in reports %}
+                <div class="report-card rounded">
+                    <div class="report-header">
+                        <h2 class="h4 mb-0">Report ID: {{ report[0] }}</h2>
+                    </div>
+                    <div class="report-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><span class="report-label">Report Date:</span> {{ report[2] }}</p>
+                                <p>
+                                    <span class="report-label">Status:</span>
+                                    <span class="status-badge {% if report[3] == 'done' %}status-done{% else %}status-pending{% endif %}">
+                                        {{ report[3] }}
+                                    </span>
+                                </p>
+                                <p><span class="report-label">X-Ray Analysis Date:</span> {{ report[10] }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><span class="report-label">Patient Name:</span> {{ report[11] }}</p>
+                                <p><span class="report-label">Age:</span> {{ report[16] }}</p>
+                                <p><span class="report-label">Gender:</span> {{ report[15] }}</p>
+                            </div>
+                        </div>
+
+                        <div class="report-section">
+                            <h3 class="h5 mb-3">X-Ray Image</h3>
+                            {% if report[4] %}
+                                <img src="{{ url_for('static', filename=report[4].replace('static/', '').replace('\\', '/')) }}" 
+                                     alt="X-Ray Image" 
+                                     class="xray-image">
+                            {% else %}
+                                <p class="text-muted fst-italic">No Image Available</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="report-section">
+                            <h3 class="h5 mb-3">Medical Details</h3>
+                            <p><span class="report-label">Study:</span> {{ report[5] }}</p>
+                            <p><span class="report-label">Technique:</span> {{ report[6] }}</p>
+                            <p><span class="report-label">Findings:</span> {{ report[7] }}</p>
+                            <p><span class="report-label">Recommendations:</span> {{ report[9] }}</p>
+                        </div>
+
+                        <div class="report-section">
+                            <h3 class="h5 mb-3">Contact Information</h3>
+                            <p><span class="report-label">Phone Number:</span> {{ report[12] }}</p>
+                            <p><span class="report-label">Email:</span> {{ report[13] }}</p>
+                            <p><span class="report-label">Address:</span> {{ report[14] }}</p>
+                        </div>
+
+                        <!-- Show More Details Button -->
+                        <button class="btn btn-primary-custom btn-sm mt-3 toggle-details" data-target="details-{{ report[0] }}">
+                            Show More Details
+                        </button>
+                        <div id="details-{{ report[0] }}" class="collapse mt-3">
+                            <p><span class="report-label">Details:</span> {{ report[1] }}</p>
+                        </div>
+
+                        <!-- Download Report Button -->
+                        <button class="btn btn-success-custom btn-sm mt-3">
+                            <a href="{{ url_for('patient.download_report', report_id=report[0]) }}" class="text-white text-decoration-none">
+                                Download Report
+                            </a>
+                        </button>                                               
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center" role="alert">
+                No reports available.
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Search Bar
+        const searchBar = document.getElementById('search-bar');
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.toLowerCase();
+            const reports = document.querySelectorAll('.report-card');
+            reports.forEach(report => {
+                const text = report.innerText.toLowerCase();
+                report.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+
+        // Toggle Details Visibility
+        const toggleButtons = document.querySelectorAll('.toggle-details');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                if (targetElement.classList.contains('show')) {
+                    targetElement.classList.remove('show');
+                    this.textContent = 'Show More Details';
+                } else {
+                    targetElement.classList.add('show');
+                    this.textContent = 'Hide Details';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

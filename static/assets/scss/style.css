@@ -1322,17 +1322,20 @@ a:hover {
   border: solid 0.3px #8366bd;
 }
 
-.image-container {
-  position: relative;
-  display: inline-block;
-  height: 150px;
-  width: 225px;
+#imagePreview {
+  display: none;
+  margin: 20px auto; /* Center horizontally */
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  border: 2px solid #ddd;
 }
-.image-container .gallery-image {
-  height: 150px;
-  width: 225px;
-  -o-object-fit: contain;
-     object-fit: contain;
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%; /* Adjust based on the layout */
 }
 
 .overlay {
@@ -1344,6 +1347,41 @@ a:hover {
   background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
   opacity: 0; /* Initial opacity set to 0 */
   transition: opacity 0.3s ease; /* Add a smooth transition effect */
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .image-container:hover .overlay {

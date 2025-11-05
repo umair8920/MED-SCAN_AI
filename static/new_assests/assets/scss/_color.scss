@@ -1,0 +1,108 @@
+:root {
+    //edited
+    --bs-aqua: #1f91f3;
+    --bs-white: #fff;
+    --bs-redlight: #fff4f5;
+    --bs-orangelight: #fff6e4;
+    --bs-lightblue: #ecf2ff;
+    --bs-darkgray: #b1b5c9;
+    //
+    --bs-blue: #0d6efd;
+    --bs-indigo: #6610f2;
+    --bs-purple: #6f42c1;
+    --bs-pink: #d63384;
+    --bs-red: #dc3545;
+    --bs-orange: #fd7e14;
+    --bs-yellow: #ffc107;
+    --bs-green: #198754;
+    --bs-teal: #20c997;
+    --bs-cyan: #0dcaf0;
+    --bs-black: #000;
+    --bs-gray: #6c757d;
+    --bs-gray-dark: #343a40;
+    --bs-gray-100: #f8f9fa;
+    --bs-gray-200: #e9ecef;
+    --bs-gray-300: #bcbcbc;
+    --bs-gray-400: #ced4da;
+    --bs-gray-500: #adb5bd;
+    --bs-gray-600: #6c757d;
+    --bs-gray-700: #495057;
+    --bs-gray-800: #343a40;
+    --bs-gray-900: #212529;
+
+    --bs-light-primary-bg: #f5f2fd;
+    --bs-primary: #00bfa5;
+    --bs-secondary: #6c757d;
+    --bs-success: #46b916;
+    --bs-success-active: #f3ffee;
+
+    --bs-primary-hover-bg:#05af99;
+    --bs-success-disable: #47b916cc;
+    --bs-success-hover: #2F9B02;
+    --bs-light-success-bg: #EAFFE1;
+   
+    --bs-info-hover: #3463E1;
+    --bs-info-disabled: #5079e9cc;
+    --bs-light-info-bg: #ECF2FF;
+    --bs-warning-hover: #E67400;
+    --bs-warning-disabled: #ff8000cc;
+    --bs-light-warning-bg: #FFF6E4;
+    --bs-danger-hover: #EE0010;
+    --bs-danger-disabled: #ff1222cc;
+    --bs-light-danger-bg: #fff4f5;
+    --bs-light-hover: #B1B5C9;
+    --bs-light-disabled: #f9f9f9cc;
+    --bs-light-light-hover: #606478;
+
+    --bs-info: #5079e9;
+    --bs-warning: #ff8000;
+    --bs-danger: #ff1121;
+    --bs-light: #f8f9fa;
+    --bs-dark: #181c32;
+
+    --bs-primary-rgb: 0, 191, 165;
+    --bs-secondary-rgb: 108, 117, 125;
+    --bs-success-rgb: 70, 185, 22;
+    --bs-info-rgb: 80, 121, 233;
+    --bs-warning-rgb: 255, 128, 0;
+    --bs-danger-rgb: 255, 17, 33;
+    --bs-light-rgb: 248, 249, 250;
+    --bs-dark-rgb: 24, 28, 50;
+    --bs-white-rgb: 255, 255, 255;
+    --bs-black-rgb: 0, 0, 0;
+    --bs-body-color-rgb: 33, 37, 41;
+    --bs-body-bg-rgb: 229, 231, 235;
+
+    --bs-body-color: #212529;
+    --bs-body-bg: #e5e7eb;
+    --bs-border-color: #dee2e6;
+    --bs-link-color: #606478;
+    --bs-link-hover-color:  #00bfa5;
+    --bs-code-color: #d63384;
+    --bs-highlight-bg: #fff3cd;
+    --bs-navbar-active-color: #00bfa5 ;
+
+    --bs-success-badge-bg: #F3FFEE;
+
+    --bs-form-control-bg: #F9F7FD;
+    --bs-calender-bg: #f3f3f3;
+}
+
+.navbar {
+    --bs-navbar-active-color:  #00bfa5 !important;
+}
+
+.Search-Employees {
+    --bs-table-striped-bg: #fbfefb !important;
+    --bs-table-hover-bg: #F2EFFF !important;
+}
+
+$text-color: #797979;
+$text-disable: #b1b5c9;
+$background-gray: #f9f9f9;
+$status-inactive: #fff3f4;
+$status-pending: #fff3db;
+$status-employee: #ecf2ff;
+$formvalid: #31c24e80;
+$forminvalid: #ff112180;
+$palceholder-text-focus:#212121;
